@@ -233,21 +233,30 @@
             50% { transform: scale(1); opacity: 1; }
             100% { transform: scale(0); opacity: 0; }
         }
+        .firework {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            animation: fireworkExplode 1s ease-out forwards;
+        }
+        @keyframes fireworkExplode {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(30); opacity: 0; }
+        }
     </style>
 </head>
 <body>
     <div class="banner">🎉 Happy Birthday Manseerat! 🎉</div>
     
     <div class="message-box">It's your special day, Manseerat miku!!! 💖👑</div>
-    <p>Wishing you all the happiness in the world! Have an amazing birthday!Can't believe you'r 17!...i dont know what to write but may you get AIR 1 IN IIT JEE.School ke board pe toppers ki list me tera name aana chaliye! 🎂✨</p>
+    <p>Wishing you all the happiness in the world! Have an amazing birthday! Can't believe you're 17!...I don't know what to write but may you get AIR 1 IN IIT JEE. School ke board pe toppers ki list me tera name aana chaliye! 🎂✨</p>
     <button id="mainButton" onclick="advanceStage()">Let's Celebrate! 🎊</button>
     
-    <img id="bdayImage" class="hidden" src="happy-birthday-boy.jpg" alt="Happy Birthday">
-    <img id="cakeImage" class="hidden cake-img" src="z1/birthday-cake.jpg" alt="Birthday Cake">
+    <img id="bdayImage" class="hidden" src="happy-birthday-boy.jpg" alt="Happy Birthday" onerror="this.style.display='none'">
+    <img id="cakeImage" class="hidden cake-img" src="birthday-cake.jpg" alt="Birthday Cake" onerror="this.style.display='none'">
     
-    <p id="finalMessage" class="hidden">Happy Birthday, Manseerat! May this year be your best one yet! Full of  success! 💖🎂</p>
-
-    
+    <p id="finalMessage" class="hidden">Happy Birthday, Manseerat! May this year be your best one yet! Full of success! 💖🎂</p>
 
     <!-- Photo Frames Container -->
     <div id="photoFrames" class="hidden photo-frame-container"></div>
@@ -281,47 +290,45 @@
             } else if (stage === 4) {
                 // Final stage
                 document.getElementById('finalMessage').classList.remove('hidden');
-                document.getElementById('musicSection').classList.remove('hidden');
                 showPhotoFrames();
                 button.style.display = 'none';
                 createSparkles();
+                createFireworks();
             }
             stage++;
-        }
-
-        function playSong(songId) {
-            let song1 = document.getElementById('song1');
-            song1.pause();
-            song1.currentTime = 0;
-            
-            let selectedSong = document.getElementById(songId);
-            selectedSong.play();
         }
 
         function showPhotoFrames() {
             const photoFrames = document.getElementById('photoFrames');
             photoFrames.classList.remove('hidden');
 
-            // Example image paths (replace with your actual image paths)
+            // Image paths - make sure these are correct relative paths or absolute URLs
             const imagePaths = [
                 "z/z1.png",
-                "z/z7.jpg",
-                "z/z6.jpg",
-                "z/z5.jpg",
                 "z/z2.jpg",
                 "z/z3.jpg",
-                "z/z4.jpg"
+                "z/z4.jpg",
+                "z/z5.jpg",
+                "z/z6.jpg",
+                "z/z7.jpg"
             ];
 
-            imagePaths.forEach(path => {
+            // Clear any existing frames
+            photoFrames.innerHTML = '';
+
+            imagePaths.forEach((path, index) => {
                 let frame = document.createElement('div');
                 frame.classList.add('photo-frame');
+                
                 let img = document.createElement('img');
                 img.src = path;
-                img.alt = "Memory";
+                img.alt = `Memory ${index + 1}`;
                 img.onerror = function() {
-                    this.src = 'https://via.placeholder.com/180x180/ffcce6/d23369?text=Manseerat+❤️';
+                    // If image fails to load, show a placeholder with text
+                    this.onerror = null;
+                    this.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180"><rect width="180" height="180" fill="%23ffcce6"/><text x="50%" y="50%" font-family="Arial" font-size="16" fill="%23d23369" text-anchor="middle" dominant-baseline="middle">Memory ' + (index + 1) + '</text></svg>';
                 };
+                
                 frame.appendChild(img);
                 photoFrames.appendChild(frame);
             });
@@ -379,28 +386,18 @@
         }
 
         function createFireworks() {
-            const fireworkSound = document.getElementById('fireworkSound');
-            fireworkSound.play();
-            
             for (let i = 0; i < 20; i++) {
                 setTimeout(() => {
                     const firework = document.createElement('div');
-                    firework.style.position = 'absolute';
+                    firework.classList.add('firework');
                     firework.style.left = Math.random() * 100 + 'vw';
                     firework.style.top = Math.random() * 50 + 'vh';
-                    firework.style.width = '5px';
-                    firework.style.height = '5px';
-                    firework.style.borderRadius = '50%';
                     firework.style.boxShadow = `0 0 10px 5px ${['#ff66b3', '#ff99cc', '#ffccff', '#ffb3e6', '#ff80bf'][Math.floor(Math.random() * 5)]}`;
-                    firework.style.animation = 'fireworkExplode 1s ease-out forwards';
                     document.body.appendChild(firework);
                     
                     setTimeout(() => {
-                        firework.style.transition = 'all 0.5s ease-out';
-                        firework.style.transform = 'scale(30)';
-                        firework.style.opacity = '0';
-                        setTimeout(() => firework.remove(), 500);
-                    }, 100);
+                        firework.remove();
+                    }, 1000);
                 }, i * 300);
             }
         }
