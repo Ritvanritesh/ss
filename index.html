@@ -2,9 +2,31 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=1200, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Happy Birthday, Manseerat! 🎉</title>
     <style>
+        /* Desktop-enforcing styles */
+        html, body {
+            min-width: 1200px;
+            overflow-x: auto;
+        }
+        @media (hover: none) {
+            .mobile-warning {
+                display: block;
+                padding: 20px;
+                background: #ffeb3b;
+                text-align: center;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                z-index: 1000;
+            }
+            body {
+                padding-top: 60px;
+            }
+        }
+        
         body {
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fbc2eb);
@@ -247,7 +269,7 @@
     </style>
 </head>
 <body>
-<!--     <div class="banner">🎉 Happy Birthday Manseerat! 🎉</div> -->
+    <div class="mobile-warning">For best experience, please view on a desktop browser</div>
     
     <div class="message-box">It's your special day, Manseerat miku!!! 💖👑</div>
     <p>Wishing you all the happiness in the world! Have an amazing birthday! Can't believe you're 17!... may you get AIR 1 IN IIT JEE. School ke board pe toppers ki list me tera name aana chaliye! GOD BLESS YOU!!!!!!!!!!🎂✨</p>
@@ -261,6 +283,24 @@
     <div id="photoFrames" class="hidden photo-frame-container"></div>
 
     <script>
+        // Force desktop view
+        function enforceDesktopView() {
+            if (window.innerWidth < 1200) {
+                const scale = 1200 / window.innerWidth;
+                document.body.style.zoom = scale;
+                document.body.style.minWidth = '1200px';
+            }
+        }
+        
+        // Disable touch events to prevent mobile behaviors
+        document.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+        }, { passive: false });
+        
+        // Initialize desktop view
+        window.addEventListener('load', enforceDesktopView);
+        window.addEventListener('resize', enforceDesktopView);
+
         let stage = 0;
         function advanceStage() {
             let button = document.getElementById('mainButton');
